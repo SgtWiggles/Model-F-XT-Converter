@@ -1,5 +1,5 @@
-Manak1n's Open Source Converter (XT)
-Designed for the PJRC Teensy 3.1
+Based on Manak1n's Open Source Converter (XT)
+Original source can be found at: https://deskthority.net/viewtopic.php?f=7&t=12597
 
 Keyboards currently supported:
    -IBM Model F "XT" (83 key) [verified]
@@ -7,9 +7,9 @@ Keyboards currently supported:
 
 Microcontrollers currently supported:
    -Teensy 3.2
-   -Teensy 3.1 [verified]
+   -Teensy 3.1 
    -Teensy 3.0
-   -Teensy++ 2.0
+   -Teensy++ 2.0 [verified]
    -Teensy 2.0
 
 Features:
@@ -18,11 +18,7 @@ Features:
    -Bypassing of keyboard's built-in key repeat
    -Porting to other Arduino boards is not too difficult
 
-Known issues:
-   -If you hold down both shift keys and then release them, shift stays on until you press and release it again.
-   -Both shift keys map to left shift.
-
-Changelog:
-
-Version 0.1 - 01/11/2016
-   -(initial release) 
+TODO:
+   -NKRO
+   -Proper layer system
+   -Configuration without flashing
