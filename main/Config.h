@@ -5,4 +5,4 @@
 #define LED_PIN 6
 
 // Used for taps
-#define TAP_TIMEOUT 250
+#define TAP_TIMEOUT 150
