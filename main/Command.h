@@ -108,14 +108,19 @@ struct Command {
 #define CALL(KEY) \
     (struct Command) { KEY, CALL_FUNC }
 
-extern unsigned runKey(unsigned key, int released);
+extern unsigned run_cmd(struct Command const* cmd, unsigned key, int released);
+extern unsigned run_key(unsigned key, int released);
 extern uint32_t layers;
 
+extern uint8_t tap_count(unsigned key);
+extern void tap_count_reset(unsigned key);
+
 #define TOTAL_LAYERS 32
+#define TOTAL_FUNCTIONS 512
+
+// User defined
 #define DEFINE_COMMAND_ARRAY() \
     struct Command const keymap[TOTAL_LAYERS][F_TOTAL] PROGMEM
-
-#define TOTAL_FUNCTIONS 512
 #define DEFINE_FUNCTION_ARRAY() \
     unsigned (*funcmap[TOTAL_FUNCTIONS])(unsigned, int)
 

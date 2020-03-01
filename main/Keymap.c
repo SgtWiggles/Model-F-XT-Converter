@@ -6,24 +6,44 @@
 
 #include "Functions.h"
 
-unsigned hello_serial(unsigned a, int b) {
-    serial_print_str("Hello World! ");
-    serial_print_int(a);
-    serial_print_str("\n");
-
-    return 0;
-}
-
-#define HELLO_FUN 0
-
-DEFINE_FUNCTION_ARRAY() = {
-    [HELLO_FUN] = hello_serial,
-};
-
 #define BASE 0
 #define USER 1
 #define NUML 2
 #define FNCL 3
+
+unsigned func_layer_tap_toggle(unsigned key, int released) {
+    static uint8_t keystate = 0;
+    static struct Command const hold = HOLD(FNCL);
+    static struct Command const togg = TOGGLE(FNCL);
+
+    uint8_t count = tap_count(key);
+    switch (count) {
+        case 1: {
+            keystate = 1;
+            run_cmd(&hold, key, released);
+        } break;
+        case 2: {
+            run_cmd(&togg, key, released);
+            keystate = 2;
+            tap_count_reset(key);
+        } break;
+
+        default:
+            if (keystate != 2)
+                run_cmd(&hold, key, released);
+
+            tap_count_reset(key);
+            break;
+    }
+
+    return 0;
+}
+
+#define FUNC_LAYER_TAP_PTR 0
+
+DEFINE_FUNCTION_ARRAY() = {
+    [FUNC_LAYER_TAP_PTR] = func_layer_tap_toggle,
+};
 
 DEFINE_COMMAND_ARRAY() = {
     [BASE] =
@@ -68,7 +88,7 @@ DEFINE_COMMAND_ARRAY() = {
             [F_L] = REMAP(KEY_L),
             [F_SEMICOLON] = REMAP(KEY_SEMICOLON),
             [F_QUOTE] = REMAP(KEY_QUOTE),
-            [F_ESC] = HOLD(FNCL),
+            [F_ESC] = CALL(FUNC_LAYER_TAP_PTR),
             [F_SHIFT] = REMAP(MODIFIERKEY_SHIFT),
             [F_BACKSLASH] = REMAP(KEY_BACKSLASH),
             [F_Z] = REMAP(KEY_Z),
@@ -149,8 +169,6 @@ DEFINE_COMMAND_ARRAY() = {
             [F_M] = REMAP(KEY_MEDIA_MUTE),
             [F_U] = REMAP(KEY_PAGE_UP),
             [F_D] = REMAP(KEY_PAGE_DOWN),
-
-            [F_S] = CALL(HELLO_FUN),
         },
 };
 
