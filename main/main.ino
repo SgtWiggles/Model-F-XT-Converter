@@ -42,8 +42,6 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
 
     attachInterrupt(CLK_PIN, interrupt, RISING);
-    initBaseCommands();
-    initCommands();
 }
 
 // These handle press/release of Ctrl, Shift, Alt, and Gui keys

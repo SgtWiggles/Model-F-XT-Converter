@@ -1,6 +1,10 @@
 #pragma once
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum FKey {
     F_NULL,
     F_TILDE,
@@ -89,28 +93,31 @@ enum FKey {
     F_TOTAL
 };
 
+enum { PASS_THROUGH = 0, TOGGLE_LAYER, HOLD_LAYER, REMAP_KEY, CALL_FUNC };
 struct Command {
-    enum { PASS_THROUGH = 0, TOGGLE_LAYER, HOLD_LAYER, REMAP_KEY, CALL_FUNC };
     uint16_t data;
     uint8_t command;
 };
 
 #define TOGGLE(LAYER) \
-    Command { LAYER, Command::TOGGLE_LAYER }
+    (struct Command) { LAYER, TOGGLE_LAYER }
 #define HOLD(LAYER) \
-    Command { LAYER, Command::HOLD_LAYER }
+    (struct Command) { LAYER, HOLD_LAYER }
 #define REMAP(KEY) \
-    Command { KEY, Command::REMAP_KEY }
-#define PASS() \
-    Command { 0, Command::PASS_THROUGH }
+    (struct Command) { KEY, REMAP_KEY }
 
-extern unsigned runKey(unsigned key, bool released);
-extern void initBaseCommands();
+extern unsigned runKey(unsigned key, int released);
+extern uint32_t layers;
 
-#define TOTAL_LAYERS 8
-#define DEFINE_COMMAND_ARRAY() Command keymap[F_TOTAL][TOTAL_LAYERS]
+#define TOTAL_LAYERS 32
+#define IMPL_DEFINE_COMMAND_ARRAY() \
+    struct Command const keymap[TOTAL_LAYERS][F_TOTAL]
+#define DEFINE_COMMAND_ARRAY() \
+    struct Command const keymap[TOTAL_LAYERS][F_TOTAL] PROGMEM
 
 // User Defined
-extern DEFINE_COMMAND_ARRAY();
-extern void initCommands();
+extern IMPL_DEFINE_COMMAND_ARRAY();
 
+#ifdef __cplusplus
+}
+#endif
