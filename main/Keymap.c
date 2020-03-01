@@ -14,7 +14,11 @@ unsigned hello_serial(unsigned a, int b) {
     return 0;
 }
 
-DEFINE_FUNCTION_ARRAY() = {hello_serial};
+#define HELLO_FUN 0
+
+DEFINE_FUNCTION_ARRAY() = {
+    [HELLO_FUN] = hello_serial,
+};
 
 #define BASE 0
 #define USER 1
@@ -146,7 +150,7 @@ DEFINE_COMMAND_ARRAY() = {
             [F_U] = REMAP(KEY_PAGE_UP),
             [F_D] = REMAP(KEY_PAGE_DOWN),
 
-            [F_S] = CALL(0),
+            [F_S] = CALL(HELLO_FUN),
         },
 };
 
