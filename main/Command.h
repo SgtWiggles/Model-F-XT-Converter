@@ -105,18 +105,23 @@ struct Command {
     (struct Command) { LAYER, HOLD_LAYER }
 #define REMAP(KEY) \
     (struct Command) { KEY, REMAP_KEY }
+#define CALL(KEY) \
+    (struct Command) { KEY, CALL_FUNC }
 
 extern unsigned runKey(unsigned key, int released);
 extern uint32_t layers;
 
 #define TOTAL_LAYERS 32
-#define IMPL_DEFINE_COMMAND_ARRAY() \
-    struct Command const keymap[TOTAL_LAYERS][F_TOTAL]
 #define DEFINE_COMMAND_ARRAY() \
     struct Command const keymap[TOTAL_LAYERS][F_TOTAL] PROGMEM
 
+#define TOTAL_FUNCTIONS 512
+#define DEFINE_FUNCTION_ARRAY() \
+    unsigned (*funcmap[TOTAL_FUNCTIONS])(unsigned, int)
+
 // User Defined
-extern IMPL_DEFINE_COMMAND_ARRAY();
+extern struct Command const keymap[TOTAL_LAYERS][F_TOTAL];
+extern unsigned (*funcmap[TOTAL_FUNCTIONS])(unsigned, int);
 
 #ifdef __cplusplus
 }
